@@ -1,6 +1,7 @@
 use std::time::Duration;
 
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
+use ts_rs::TS;
 
 const SECONDS_PER_MINUTE: u64 = 60;
 const MINUTES_PER_HOUR: u64 = 60;
@@ -29,8 +30,8 @@ const SECONDS_PER_WEEK: u64 = DAYS_PER_WEEK * SECONDS_PER_DAY;
 /// - Two days is `P2D`.
 /// - Two seconds is `PT2S`.
 /// - Six weeks and five minutes is `P6WT5M`.
-#[derive(Debug, Clone, PartialEq)]
-pub struct MangaDexDuration(Duration);
+#[derive(Debug, Clone, PartialEq, TS)]
+pub struct MangaDexDuration(#[ts(type = "Duration")] Duration);
 
 impl MangaDexDuration {
     pub fn new(duration: Duration) -> Self {

@@ -1,11 +1,13 @@
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 use url::Url;
 
 /// Related links for a manga.
-#[derive(Clone, Debug, Default, Deserialize, Hash, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, Hash, PartialEq, Serialize, TS)]
 #[serde(rename_all = "snake_case")]
 #[cfg_attr(feature = "non_exhaustive", non_exhaustive)]
 #[cfg_attr(feature = "specta", derive(specta::Type))]
+#[ts(export)]
 pub struct MangaLinks {
     /// Amazon Product URL.
     ///
@@ -17,6 +19,7 @@ pub struct MangaLinks {
     #[serde(rename = "amz")]
     #[cfg_attr(feature = "specta", specta(type = Option<String>))]
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[ts(type = "Url")]
     pub amazon: Option<Url>,
 
     /// AniList ID.
@@ -77,6 +80,7 @@ pub struct MangaLinks {
     #[serde(rename = "ebj")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[cfg_attr(feature = "specta", specta(type = Option<String>))]
+    #[ts(type = "Url")]
     pub ebook_japan: Option<Url>,
 
     /// Official English URL.
@@ -149,6 +153,7 @@ pub struct MangaLinks {
     /// - `https://www.sunday-webry.com/detail-yoru.php?title_id=1282c`
     #[cfg_attr(feature = "specta", specta(type = Option<String>))]
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[ts(type = "Url")]
     pub raw: Option<Url>,
 }
 
@@ -175,8 +180,9 @@ impl MangaLinks {
 /// BookWalker URI.
 ///
 /// Example: "`series/91701`".
-#[derive(Clone, Debug, Deserialize, Hash, PartialEq, Serialize)]
+#[derive(Clone, Debug, Deserialize, Hash, PartialEq, Serialize, ts_rs::TS)]
 #[cfg_attr(feature = "specta", derive(specta::Type))]
+#[ts(export)]
 pub struct BookWalker(pub String);
 
 impl std::fmt::Display for BookWalker {
@@ -188,8 +194,9 @@ impl std::fmt::Display for BookWalker {
 /// MangaUpdates ID.
 ///
 /// Example: "`132515`".
-#[derive(Clone, Debug, Deserialize, Hash, PartialEq, Serialize)]
+#[derive(Clone, Debug, Deserialize, Hash, PartialEq, Serialize, ts_rs::TS)]
 #[cfg_attr(feature = "specta", derive(specta::Type))]
+#[ts(export)]
 pub struct MangaUpdates(pub String);
 
 impl std::fmt::Display for MangaUpdates {
@@ -204,8 +211,9 @@ impl std::fmt::Display for MangaUpdates {
 /// MyAnimeList ID.
 ///
 /// Example: "`98436`".
-#[derive(Clone, Debug, Deserialize, Hash, PartialEq, Serialize)]
+#[derive(Clone, Debug, Deserialize, Hash, PartialEq, Serialize, ts_rs::TS)]
 #[cfg_attr(feature = "specta", derive(specta::Type))]
+#[ts(export)]
 pub struct MyAnimeList(pub String);
 
 impl std::fmt::Display for MyAnimeList {
@@ -217,8 +225,9 @@ impl std::fmt::Display for MyAnimeList {
 /// NovelUpdates slug.
 ///
 /// Example: "`novel-updates`".
-#[derive(Clone, Debug, Deserialize, Hash, PartialEq, Serialize)]
+#[derive(Clone, Debug, Deserialize, Hash, PartialEq, Serialize, ts_rs::TS)]
 #[cfg_attr(feature = "specta", derive(specta::Type))]
+#[ts(export)]
 pub struct NovelUpdates(pub String);
 
 impl std::fmt::Display for NovelUpdates {

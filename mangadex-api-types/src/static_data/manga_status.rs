@@ -1,8 +1,10 @@
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 
-#[derive(Clone, Copy, Debug, Deserialize, Hash, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Hash, PartialEq, PartialOrd, Serialize, TS)]
 #[serde(rename_all = "lowercase")]
 #[cfg_attr(feature = "specta", derive(specta::Type))]
+#[ts(export)]
 pub enum MangaStatus {
     /// Manga is still going on.
     Ongoing,

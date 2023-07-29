@@ -1,12 +1,14 @@
 use mangadex_api_types::{Language, MangaDexDateTime};
 use serde::Deserialize;
+use ts_rs::TS;
 
 /// General cover information.
-#[derive(Clone, Debug, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, PartialEq, TS)]
 #[serde(rename_all = "camelCase")]
 #[cfg_attr(feature = "non_exhaustive", non_exhaustive)]
 #[cfg_attr(feature = "serialize", derive(serde::Serialize))]
 #[cfg_attr(feature = "specta", derive(specta::Type))]
+#[ts(export)]
 pub struct CoverAttributes {
     pub description: String,
     pub locale: Option<Language>,

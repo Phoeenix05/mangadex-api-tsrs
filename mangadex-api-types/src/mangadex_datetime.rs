@@ -1,13 +1,15 @@
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use time::{format_description, OffsetDateTime};
+use ts_rs::TS;
 
 pub(crate) const MANGADEX_DATETIME_FORMAT: &str =
     "[year]-[month]-[day]T[hour]:[minute]:[second][offset_hour sign:mandatory]:[offset_minute]";
 
 /// Newtype struct for handling datetime fields in MangaDex.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, TS)]
 #[cfg_attr(feature = "specta", derive(specta::Type))]
-pub struct MangaDexDateTime(OffsetDateTime);
+#[ts(export)]
+pub struct MangaDexDateTime(#[ts(type = "OffsetDataTime")] OffsetDateTime);
 
 impl MangaDexDateTime {
     pub fn new(datetime: &OffsetDateTime) -> Self {

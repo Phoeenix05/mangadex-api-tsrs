@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 
 // Relationship types for response objects.
 ///
@@ -6,10 +7,11 @@ use serde::{Deserialize, Serialize};
 ///
 /// This should only be used with the `type` response field.
 /// For use with the `includes[]` query parameter, refer to the [`ReferenceExpansionResource` enum](crate::ReferenceExpansionResource).
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, Hash, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, Hash, PartialEq, Eq, TS)]
 #[serde(rename_all = "snake_case")]
 #[cfg_attr(feature = "non_exhaustive", non_exhaustive)]
 #[cfg_attr(feature = "specta", derive(specta::Type))]
+#[ts(export)]
 pub enum RelationshipType {
     /// Manga resource.
     Manga,

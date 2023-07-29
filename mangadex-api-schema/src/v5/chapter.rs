@@ -1,4 +1,5 @@
 use serde::Deserialize;
+use ts_rs::TS;
 use url::Url;
 use uuid::Uuid;
 
@@ -7,11 +8,12 @@ use mangadex_api_types::{Language, MangaDexDateTime};
 
 /// General chapter information.
 /// More details at https://api.mangadex.org/docs/swagger.html#model-ChapterAttributes
-#[derive(Clone, Debug, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, PartialEq, TS)]
 #[serde(rename_all = "camelCase")]
 #[cfg_attr(feature = "non_exhaustive", non_exhaustive)]
 #[cfg_attr(feature = "serialize", derive(serde::Serialize))]
 #[cfg_attr(feature = "specta", derive(specta::Type))]
+#[ts(export)]
 pub struct ChapterAttributes {
     // TODO: Known issue: API doesn't always return an empty string despite the docs saying it's not nullable.
     #[serde(deserialize_with = "deserialize_null_default")]
@@ -25,8 +27,10 @@ pub struct ChapterAttributes {
     /// Language the text is in.
     pub translated_language: Language,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub uploader : Option<Uuid>,
+    #[ts(type = "Uuid")]
+    pub uploader: Option<Uuid>,
     /// Denotes a chapter that links to an external source.
+    #[ts(type = "Url")]
     pub external_url: Option<Url>,
     pub version: u32,
     /// Datetime in `YYYY-MM-DDTHH:MM:SS+HH:MM` format.

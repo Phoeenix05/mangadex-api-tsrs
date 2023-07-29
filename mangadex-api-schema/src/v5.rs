@@ -7,6 +7,7 @@ pub mod check_username_available;
 pub mod cover;
 pub mod custom_list;
 pub mod error;
+mod exports_types;
 pub mod is_following_response;
 pub mod legacy_id_mapping;
 pub mod login_response;
@@ -28,13 +29,13 @@ pub mod upload_session_file;
 pub mod user;
 pub mod user_report;
 pub mod user_settings;
-mod exports_types;
 
 pub use self::exports_types::*;
 use std::collections::HashMap;
 
 use mangadex_api_types as types;
 use serde::Deserialize;
+use ts_rs::TS;
 use uuid::Uuid;
 
 use types::{Language, MangaRelation, RelationshipType, ResponseType, ResultType};
@@ -43,11 +44,12 @@ pub(crate) use crate::ApiObject;
 
 // TODO: Find a way to reduce the boilerplate for this.
 // `struct-variant` (https://docs.rs/struct-variant) is a potential candidate for this.
-#[derive(Debug, Deserialize, Clone)]
+#[derive(Debug, Deserialize, Clone, TS)]
 #[allow(clippy::large_enum_variant)]
 #[serde(untagged)]
 #[cfg_attr(feature = "serialize", derive(serde::Serialize))]
 #[cfg_attr(feature = "specta", derive(specta::Type))]
+#[ts(export)]
 pub enum RelatedAttributes {
     /// Manga resource.
     Manga(MangaAttributes),
@@ -71,10 +73,12 @@ pub enum RelatedAttributes {
     CustomList(CustomListAttributes),
 }
 
-#[derive(Debug, Deserialize, Clone)]
+#[derive(Debug, Deserialize, Clone, TS)]
 #[cfg_attr(feature = "serialize", derive(serde::Serialize))]
 #[cfg_attr(feature = "specta", derive(specta::Type))]
+#[ts(export)]
 pub struct Relationship {
+    #[ts(type = "Uuid")]
     pub id: Uuid,
     #[serde(rename = "type")]
     pub type_: RelationshipType,
@@ -109,15 +113,15 @@ pub type LocalizedString = HashMap<Language, String>;
 /// Originally a Deserializer helper to handle JSON array or object types.
 ///
 /// MangaDex currently returns an empty array when the localized string field isn't present.
-/// 
+///
 /// The Serializer was added in 0.2.0 for pratical and necessities reason
 pub(crate) mod localizedstring_array_or_map {
     use std::collections::HashMap;
 
+    use super::LocalizedString;
     use serde::de::{Deserialize, Deserializer, MapAccess, SeqAccess, Visitor};
     #[cfg(feature = "serialize")]
     use serde::ser::{Serialize, Serializer};
-    use super::LocalizedString;
 
     pub fn deserialize<'de, D>(deserializer: D) -> Result<LocalizedString, D::Error>
     where
@@ -152,9 +156,9 @@ pub(crate) mod localizedstring_array_or_map {
         deserializer.deserialize_any(V)
     }
     #[cfg(feature = "serialize")]
-    pub fn serialize<S>(to_use : &LocalizedString ,serializer : S) -> Result<S::Ok, S::Error>
-        where 
-            S : Serializer
+    pub fn serialize<S>(to_use: &LocalizedString, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
     {
         to_use.serialize(serializer)
     }
@@ -163,18 +167,18 @@ pub(crate) mod localizedstring_array_or_map {
 /// Originally a Deserializer helper to handle JSON array or object types.
 ///
 /// MangaDex sometimes returns an array instead of a JSON object for the volume aggregate field.
-/// 
+///
 /// The Serializer was added in 0.2.0 for pratical and necessities reason
 pub(crate) mod volume_aggregate_array_or_map {
-    use std::collections::BTreeMap;
-    #[cfg(feature = "serialize")]
-    use serde::Serialize;
-    #[cfg(feature = "serialize")]
-    use std::collections::HashMap;
+    use super::manga_aggregate::VolumeAggregate;
     use serde::de::{Deserializer, MapAccess, SeqAccess, Visitor};
     #[cfg(feature = "serialize")]
     use serde::ser::Serializer;
-    use super::manga_aggregate::VolumeAggregate;
+    #[cfg(feature = "serialize")]
+    use serde::Serialize;
+    use std::collections::BTreeMap;
+    #[cfg(feature = "serialize")]
+    use std::collections::HashMap;
 
     type VolumeAggregateCollection = Vec<VolumeAggregate>;
 
@@ -246,14 +250,17 @@ pub(crate) mod volume_aggregate_array_or_map {
     }
     #[cfg(feature = "serialize")]
     #[allow(dead_code)]
-    pub fn serialize<S>(to_use : &VolumeAggregateCollection, serializer : S) -> Result<S::Ok, S::Error>
+    pub fn serialize<S>(
+        to_use: &VolumeAggregateCollection,
+        serializer: S,
+    ) -> Result<S::Ok, S::Error>
     where
-        S : Serializer
+        S: Serializer,
     {
         use super::manga_aggregate::VolumeAggregateSer;
 
-        let mut volumes : HashMap<String, VolumeAggregateSer> = HashMap::new();
-        for volume in to_use{
+        let mut volumes: HashMap<String, VolumeAggregateSer> = HashMap::new();
+        for volume in to_use {
             volumes.insert(volume.volume.clone(), Into::into(volume.clone()));
         }
         volumes.serialize(serializer)
@@ -263,15 +270,15 @@ pub(crate) mod volume_aggregate_array_or_map {
 /// Originally a Deserializer helper to handle JSON array or object types.
 ///
 /// MangaDex sometimes returns an array instead of a JSON object for the chapter aggregate field.
-/// 
+///
 /// The Serializer was added in 0.2.0 for pratical and necessities reason
 pub(crate) mod chapter_aggregate_array_or_map {
-    use std::collections::BTreeMap;
-    #[cfg(feature = "serialize")]
-    use serde::Serialize;
+    use serde::de::{Deserializer, MapAccess, SeqAccess, Visitor};
     #[cfg(feature = "serialize")]
     use serde::ser::Serializer;
-    use serde::de::{Deserializer, MapAccess, SeqAccess, Visitor};
+    #[cfg(feature = "serialize")]
+    use serde::Serialize;
+    use std::collections::BTreeMap;
 
     use super::manga_aggregate::ChapterAggregate;
 
@@ -344,13 +351,16 @@ pub(crate) mod chapter_aggregate_array_or_map {
         deserializer.deserialize_any(V)
     }
     #[cfg(feature = "serialize")]
-    pub fn serialize<S>(to_use : &ChapterAggregateCollection, serializer : S) -> Result<S::Ok, S::Error>
+    pub fn serialize<S>(
+        to_use: &ChapterAggregateCollection,
+        serializer: S,
+    ) -> Result<S::Ok, S::Error>
     where
-        S : Serializer
+        S: Serializer,
     {
         use std::collections::HashMap;
 
-        let mut chapters : HashMap<String, ChapterAggregate> = HashMap::new();
+        let mut chapters: HashMap<String, ChapterAggregate> = HashMap::new();
         for chapter in to_use {
             chapters.insert(chapter.chapter.clone(), chapter.clone());
         }
@@ -361,15 +371,15 @@ pub(crate) mod chapter_aggregate_array_or_map {
 /// Originally a Deserializer helper to handle JSON array or object types.
 ///
 /// MangaDex sometimes returns an array instead of a JSON object for the `links` field for `MangaAttributes`.
-/// 
+///
 /// The Serializer was added in 0.2.0 for pratical and necessities reason
 pub(crate) mod manga_links_array_or_struct {
-    #[cfg(feature = "serialize")]
-    use serde::Serialize;
+    use crate::v5::MangaLinks;
     use serde::de::{Deserialize, Deserializer, MapAccess, SeqAccess, Visitor};
     #[cfg(feature = "serialize")]
     use serde::ser::Serializer;
-    use crate::v5::MangaLinks;
+    #[cfg(feature = "serialize")]
+    use serde::Serialize;
 
     /// Deserialize a `MangaLinks` from a JSON value or none.
     pub fn deserialize<'de, D>(deserializer: D) -> Result<Option<MangaLinks>, D::Error>
@@ -451,31 +461,27 @@ pub(crate) mod manga_links_array_or_struct {
         deserializer.deserialize_option(OptionMangaLinksVisitor)
     }
     #[cfg(feature = "serialize")]
-    pub fn serialize<S>(to_use : &Option<MangaLinks>, serializer : S) -> Result<S::Ok, S::Error> 
-    where 
-        S : Serializer
+    pub fn serialize<S>(to_use: &Option<MangaLinks>, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
     {
         match to_use {
-            None => {
-                serializer.serialize_none()
-            },
-            Some(data) => {
-                data.serialize(serializer)
-            }
+            None => serializer.serialize_none(),
+            Some(data) => data.serialize(serializer),
         }
     }
 }
 
 /// Originally a Deserializer for an array of languages, discarding elements that are `null`.
-/// 
+///
 /// The Serializer was added in 0.2.0 for pratical and necessities reason
 pub(crate) mod language_array_or_skip_null {
     use mangadex_api_types::Language;
-    #[cfg(feature = "serialize")]
-    use serde::Serialize;
     use serde::de::{Deserializer, SeqAccess, Visitor};
     #[cfg(feature = "serialize")]
     use serde::ser::Serializer;
+    #[cfg(feature = "serialize")]
+    use serde::Serialize;
     /// Deserialize a `Vec<Language>` from an array of JSON values.
     pub fn deserialize<'de, D>(deserializer: D) -> Result<Vec<Language>, D::Error>
     where
@@ -511,11 +517,10 @@ pub(crate) mod language_array_or_skip_null {
         deserializer.deserialize_seq(V)
     }
     #[cfg(feature = "serialize")]
-    pub fn serialize<S>(to_use: &Vec<Language>, serializer : S) -> Result<S::Ok, S::Error>
+    pub fn serialize<S>(to_use: &Vec<Language>, serializer: S) -> Result<S::Ok, S::Error>
     where
-        S : Serializer
+        S: Serializer,
     {
         to_use.serialize(serializer)
     }
 }
-

@@ -2,6 +2,7 @@ use std::str::FromStr;
 use std::string::ParseError;
 
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 
 macro_rules! languages {
     (
@@ -11,9 +12,10 @@ macro_rules! languages {
         )*
     ) => {
         /// Languages supported by MangaDex.
-        #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, PartialEq, PartialOrd, Serialize)]
+        #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, PartialEq, PartialOrd, Serialize, TS)]
         #[cfg_attr(feature = "non_exhaustive", non_exhaustive)]
         #[cfg_attr(feature = "specta", derive(specta::Type))]
+        #[ts(export)]
         pub enum Language {
             $(
                 $( #[$meta] )*

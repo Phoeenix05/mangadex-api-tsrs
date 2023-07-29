@@ -1,8 +1,10 @@
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 
-#[derive(Clone, Copy, Debug, Deserialize, Hash, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Hash, PartialEq, PartialOrd, Serialize, TS)]
 #[serde(rename_all = "snake_case")]
 #[cfg_attr(feature = "specta", derive(specta::Type))]
+#[ts(export)]
 pub enum ContentRating {
     Erotica,
     Pornographic,
@@ -10,7 +12,7 @@ pub enum ContentRating {
     Suggestive,
 }
 
-impl Default for ContentRating{
+impl Default for ContentRating {
     fn default() -> Self {
         Self::Safe
     }

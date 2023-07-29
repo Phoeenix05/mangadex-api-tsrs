@@ -2,6 +2,7 @@ use mangadex_api_types::{
     ContentRating, Demographic, Language, MangaDexDateTime, MangaState, MangaStatus,
 };
 use serde::Deserialize;
+use ts_rs::TS;
 use uuid::Uuid;
 
 use crate::v5::{
@@ -10,11 +11,12 @@ use crate::v5::{
 };
 
 /// General manga information.
-#[derive(Debug, Deserialize, Clone)]
+#[derive(Debug, Deserialize, Clone, TS)]
 #[serde(rename_all = "camelCase")]
 #[cfg_attr(feature = "non_exhaustive", non_exhaustive)]
 #[cfg_attr(feature = "serialize", derive(serde::Serialize))]
 #[cfg_attr(feature = "specta", derive(specta::Type))]
+#[ts(export)]
 pub struct MangaAttributes {
     pub title: LocalizedString,
     pub alt_titles: Vec<LocalizedString>,
@@ -38,7 +40,8 @@ pub struct MangaAttributes {
     // TODO: Remove the default when MangaDex always returns this field.
     #[serde(default)]
     pub chapter_numbers_reset_on_new_volume: bool,
-    pub latest_uploaded_chapter : Option<Uuid>,
+    #[ts(type = "Uuid")]
+    pub latest_uploaded_chapter: Option<Uuid>,
     // Known issue: MangaDex sometimes returns `null` as an element value, which doesn't match a possible language.
     #[serde(with = "language_array_or_skip_null")]
     pub available_translated_languages: Vec<Language>,
