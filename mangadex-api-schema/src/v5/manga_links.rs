@@ -19,7 +19,7 @@ pub struct MangaLinks {
     #[serde(rename = "amz")]
     #[cfg_attr(feature = "specta", specta(type = Option<String>))]
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[ts(type = "Url")]
+    #[ts(type = "string")]
     pub amazon: Option<Url>,
 
     /// AniList ID.
@@ -80,7 +80,7 @@ pub struct MangaLinks {
     #[serde(rename = "ebj")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[cfg_attr(feature = "specta", specta(type = Option<String>))]
-    #[ts(type = "Url")]
+    #[ts(type = "string")]
     pub ebook_japan: Option<Url>,
 
     /// Official English URL.
@@ -153,7 +153,7 @@ pub struct MangaLinks {
     /// - `https://www.sunday-webry.com/detail-yoru.php?title_id=1282c`
     #[cfg_attr(feature = "specta", specta(type = Option<String>))]
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[ts(type = "Url")]
+    #[ts(type = "string")]
     pub raw: Option<Url>,
 }
 

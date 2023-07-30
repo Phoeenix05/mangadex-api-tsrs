@@ -27,10 +27,10 @@ pub struct ChapterAttributes {
     /// Language the text is in.
     pub translated_language: Language,
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[ts(type = "Uuid")]
+    #[ts(type = "string")]
     pub uploader: Option<Uuid>,
     /// Denotes a chapter that links to an external source.
-    #[ts(type = "Url")]
+    #[ts(type = "string")]
     pub external_url: Option<Url>,
     pub version: u32,
     /// Datetime in `YYYY-MM-DDTHH:MM:SS+HH:MM` format.

@@ -24,13 +24,13 @@ pub struct ScanlationGroupAttributes {
     /// <https://twitter.com>
     ///
     /// Nullable.
-    #[ts(type = "Url")]
+    #[ts(type = "string")]
     pub twitter: Option<Url>,
     /// Regex: [^https:/\/www\.mangaupdates\.com\/(?:groups|publishers)\.html\?id=\d+](https://www.mangaupdates.com)
     ///
     /// Nullable.
     ///
-    #[ts(type = "Url")]
+    #[ts(type = "string")]
     pub manga_updates: Option<Url>,
     /// Languages the scanlation primarily translates or uploads works into.
     pub focused_languages: Option<Vec<Language>>,

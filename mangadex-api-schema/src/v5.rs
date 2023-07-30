@@ -78,7 +78,7 @@ pub enum RelatedAttributes {
 #[cfg_attr(feature = "specta", derive(specta::Type))]
 #[ts(export)]
 pub struct Relationship {
-    #[ts(type = "Uuid")]
+    #[ts(type = "string")]
     pub id: Uuid,
     #[serde(rename = "type")]
     pub type_: RelationshipType,

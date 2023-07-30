@@ -98,7 +98,7 @@ pub struct ApiData<T> {
 #[cfg_attr(feature = "specta", derive(specta::Type))]
 #[ts(export)]
 pub struct ApiObject<A, T = RelationshipType> {
-    #[ts(type = "Uuid")]
+    #[ts(type = "string")]
     pub id: Uuid,
     pub type_: T,
     pub attributes: A,

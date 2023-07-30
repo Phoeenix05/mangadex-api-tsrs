@@ -18,9 +18,12 @@ use crate::v5::{
 #[cfg_attr(feature = "specta", derive(specta::Type))]
 #[ts(export)]
 pub struct MangaAttributes {
+    #[ts(type = "Map<string, string>")]
     pub title: LocalizedString,
+    #[ts(type = "Array<Map<string, string>>")]
     pub alt_titles: Vec<LocalizedString>,
     #[serde(with = "localizedstring_array_or_map")]
+    #[ts(type = "Map<string, string>")]
     pub description: LocalizedString,
     // Known issue: This field isn't always returned, so default to `false` when it isn't.
     // The decision to use the default value is to maintain compatibility if the MangaDex API
@@ -40,7 +43,7 @@ pub struct MangaAttributes {
     // TODO: Remove the default when MangaDex always returns this field.
     #[serde(default)]
     pub chapter_numbers_reset_on_new_volume: bool,
-    #[ts(type = "Uuid")]
+    #[ts(type = "string")]
     pub latest_uploaded_chapter: Option<Uuid>,
     // Known issue: MangaDex sometimes returns `null` as an element value, which doesn't match a possible language.
     #[serde(with = "language_array_or_skip_null")]

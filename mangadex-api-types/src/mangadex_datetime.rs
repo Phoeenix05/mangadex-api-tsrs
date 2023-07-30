@@ -9,7 +9,7 @@ pub(crate) const MANGADEX_DATETIME_FORMAT: &str =
 #[derive(Debug, Clone, PartialEq, TS)]
 #[cfg_attr(feature = "specta", derive(specta::Type))]
 #[ts(export)]
-pub struct MangaDexDateTime(#[ts(type = "OffsetDataTime")] OffsetDateTime);
+pub struct MangaDexDateTime(#[ts(type = "string")] OffsetDateTime);
 
 impl MangaDexDateTime {
     pub fn new(datetime: &OffsetDateTime) -> Self {
